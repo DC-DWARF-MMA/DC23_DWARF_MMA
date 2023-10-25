@@ -2,7 +2,6 @@ import "./App.css";
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "./firebase";
 import Button from "@mui/material/Button";
-import { UserContracts } from "./pages/UserContracts";
 
 const App = () => {
   const saveToDb = async () => {
