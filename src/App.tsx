@@ -26,7 +26,6 @@ const App = () => {
           Click here to save to db
         </Button>
       </section>
-      <UserContracts userMail={"test@gmail.com"} />
     </div>
   );
 };
