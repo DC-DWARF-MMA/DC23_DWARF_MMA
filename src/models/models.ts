@@ -16,7 +16,7 @@ enum PaymentFreq {
   yearly = 3,
 }
 
-export interface Client {
+export interface ClientInterface {
   id: string;
   email: string;
   firstName: string;
@@ -26,7 +26,7 @@ export interface Client {
   phone: string;
 }
 
-export interface Service {
+export interface ServiceInterface {
   id: string;
   name: string;
   type: string;

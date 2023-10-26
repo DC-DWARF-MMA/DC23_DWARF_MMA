@@ -2,7 +2,11 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { useUserContracts } from "../services/FirebaseService";
 import { Contract } from "./Contract";
 
-export const UserContracts = ({ userMail }: { userMail: string }) => {
+interface UserContractsInterface {
+  userMail: string;
+}
+
+export const UserContracts = ({ userMail }: UserContractsInterface) => {
   const contracts = useUserContracts(userMail);
 
   return contracts ? (

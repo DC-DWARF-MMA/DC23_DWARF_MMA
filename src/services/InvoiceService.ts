@@ -1,25 +1,34 @@
-import FirebaseService from "./FirebaseService";
+import { useCallback, useEffect, useState } from "react";
+import { useClient, useContract, useServices } from "./FirebaseService";
+import {
+  ClientInterface,
+  ContractInterface,
+  ServiceInterface,
+} from "../models/models";
 
-class InvoiceService {
+export const useInvoice = (contractId: string, email: string) => {
+  const contract = useContract(contractId);
+  const client = useClient(email);
+  const services = useServices();
 
-    static async generateInvoice(contractId: string) {
-        const contract = await FirebaseService.getContract(contractId);
-        const client = await FirebaseService.getClient(contract.email);
-        const services = await FirebaseService.getServices();
+  const [invoice, setInvoice] = useState<InvoiceInterface>();
 
-        services.filter((service) => {contract.services.includes(service.name)});
-
-        const total = services.reduce((acc, service) => acc + service.price, 0);
-
-        const invoice = {
-            id: contractId,
-            client: client,
-            contract: contract,
-            services: services,
-            total: total
-        };
-        return invoice;
+  const fetchInvoice = useCallback(() => {
+    if (contract && client && services) {
+      const total = services
+        ?.filter((service) => contract?.services.includes(service.name))
+        .reduce((acc, service) => acc + service.price, 0);
+      setInvoice({ id: contractId, client, contract, services, total });
     }
-}
+  }, [contract, client, services, setInvoice]);
 
-export default InvoiceService;
+  return { invoice, fetchInvoice };
+};
+
+interface InvoiceInterface {
+  id: string;
+  client: ClientInterface;
+  contract: ContractInterface;
+  services: ServiceInterface[];
+  total: number;
+}

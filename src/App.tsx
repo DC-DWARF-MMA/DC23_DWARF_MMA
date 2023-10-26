@@ -3,8 +3,8 @@ import { addDoc, collection } from "firebase/firestore";
 import { db } from "./firebase";
 import Button from "@mui/material/Button";
 import { useState } from "react";
-import InvoiceService from "./services/InvoiceService";
 import { UserContracts } from "./pages/UserContracts";
+import { Invoice } from "./pages/Invoice";
 
 const App = () => {
   const [invoice, setInvoice] = useState({});
@@ -23,17 +23,6 @@ const App = () => {
     }
   };
 
-  const generateInvoice = async () => {
-    setLoading(true);
-    InvoiceService.generateInvoice("JmkmSHO5vsi1jHm8oHwt")
-      .then((data) => {
-        setInvoice(data);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
-
   return (
     <div className="App">
       <h1>Dwarf-mma</h1>
@@ -44,9 +33,8 @@ const App = () => {
         </Button>
         <br />
         <br />
-        <Button variant="contained" onClick={generateInvoice}>
-          Click here to generate invoice for ""
-        </Button>
+
+        <Invoice />
       </section>
 
       <section>
