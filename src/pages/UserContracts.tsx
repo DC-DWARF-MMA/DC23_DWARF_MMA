@@ -1,20 +1,15 @@
-import { useUserContract } from "../hooks/useUserContract";
 import CircularProgress from "@mui/material/CircularProgress";
+import { useUserContracts } from "../services/FirebaseService";
+import { Contract } from "./Contract";
 
 export const UserContracts = ({ userMail }: { userMail: string }) => {
-  const contract = useUserContract(userMail);
+  const contracts = useUserContracts(userMail);
 
-  return contract ? (
+  return contracts ? (
     <div>
-      <h2>Email: {contract.email}</h2>
-      <h2>Services: {contract.services.toString()}</h2>
-      <h2>Start date: {contract.startDate.toString()}</h2>
-      <h2>
-        End date:
-        {contract.endDate.length ? contract.endDate : "Still active"}
-      </h2>
-      <h2>Payment method: {contract.paymentMethod}</h2>
-      <h2>Payment frequency: {contract.paymentFreq}</h2>
+      {contracts.map((contract) => (
+        <Contract contract={contract} />
+      ))}
     </div>
   ) : (
     <CircularProgress />

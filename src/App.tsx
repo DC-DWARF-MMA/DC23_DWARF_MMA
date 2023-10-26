@@ -2,13 +2,11 @@ import "./App.css";
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "./firebase";
 import Button from "@mui/material/Button";
-import FirebaseService from "./services/FirebaseService";
-import Contract from "./models/contract";
 import { useState } from "react";
 import InvoiceService from "./services/InvoiceService";
+import { UserContracts } from "./pages/UserContracts";
 
 const App = () => {
-
   const [invoice, setInvoice] = useState({});
   const [loading, setLoading] = useState(false);
 
@@ -27,23 +25,25 @@ const App = () => {
 
   const generateInvoice = async () => {
     setLoading(true);
-    InvoiceService.generateInvoice("JmkmSHO5vsi1jHm8oHwt").then((data) => {
-      setInvoice(data);
-    }).finally(() => {
-      setLoading(false);
-    });
-  
+    InvoiceService.generateInvoice("JmkmSHO5vsi1jHm8oHwt")
+      .then((data) => {
+        setInvoice(data);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
     <div className="App">
       <h1>Dwarf-mma</h1>
+      <UserContracts userMail="miroslaw@gmail.com" />
       <section>
         <Button variant="contained" onClick={saveToDb}>
           Click here to save to db
         </Button>
-        <br/>
-        <br/>
+        <br />
+        <br />
         <Button variant="contained" onClick={generateInvoice}>
           Click here to generate invoice for ""
         </Button>
@@ -52,7 +52,7 @@ const App = () => {
       <section>
         <h2>Contracts</h2>
         {loading && <div>Loading...</div>}
-        {JSON.stringify(invoice) }
+        {JSON.stringify(invoice)}
       </section>
     </div>
   );
