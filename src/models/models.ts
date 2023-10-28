@@ -21,9 +21,17 @@ export interface ClientInterface {
   email: string;
   firstName: string;
   lastName: string;
-  dateOfBirth: Date;
-  sex: boolean;
-  phone: string;
+  birthDate: Date;
+  gender: string;
+  phoneNumber: string;
+}
+export interface ClientInterfaceIn {
+  email: string;
+  firstName: string;
+  lastName: string;
+  birthDate: Date;
+  gender: string;
+  phoneNumber: string;
 }
 
 export interface ServiceInterface {

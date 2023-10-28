@@ -5,6 +5,7 @@ import Button from "@mui/material/Button";
 import { useState } from "react";
 import { UserContracts } from "./pages/UserContracts";
 import { Invoice } from "./pages/Invoice";
+import { Navbar } from "./shared/Navbar";
 
 const App = () => {
   const [invoice, setInvoice] = useState({});
@@ -25,6 +26,7 @@ const App = () => {
 
   return (
     <div className="App">
+      <Navbar />
       <h1>Dwarf-mma</h1>
       <UserContracts userMail="miroslaw@gmail.com" />
       <section>
