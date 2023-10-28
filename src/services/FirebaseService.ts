@@ -1,4 +1,11 @@
-import { collection, doc, getDoc, getDocs, addDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  addDoc,
+  setDoc,
+} from "firebase/firestore";
 import { db } from "../firebase";
 import {
   ClientInterface,
@@ -63,8 +70,10 @@ export const useClient = () => {
       const snapshot = await getDoc(clientDoc);
       if (snapshot.exists()) {
         setClient({ ...(snapshot.data() as ClientInterface), id: snapshot.id });
+        return true;
       } else {
         setError(true);
+        return false;
       }
     },
     [setClient, setError]
@@ -95,10 +104,16 @@ export const useSaveData = (collectionName: string) => {
   const [error, setError] = useState<string>("");
 
   const saveData = useCallback(
-    async (data: any) => {
+    async (data: any, primaryKey?: string) => {
       setIsCompleted(false);
       try {
-        await addDoc(collection(db, collectionName), data);
+        // const customDocRef = doc(db, "yourCollectionName", documentId);
+        if (primaryKey) {
+          const customDocRef = doc(db, collectionName, primaryKey);
+          await setDoc(customDocRef, data);
+        } else {
+          await addDoc(collection(db, collectionName), data);
+        }
       } catch (error) {
         if (error instanceof Error) setError(error.message);
         else setError(String(error));

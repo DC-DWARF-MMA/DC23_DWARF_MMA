@@ -24,7 +24,7 @@ const UserRegistrationForm: React.FC<UserRegistrationPropsType> = (props) => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    saveData(formValues);
+    saveData(formValues, props.email);
     console.log(formValues);
   };
 

@@ -1,6 +1,6 @@
 import { Navbar } from "../shared/Navbar";
 import { Typography, TextField, Button } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useClient } from "../services/FirebaseService";
 import UserRegistrationForm from "../forms/UserRegistrationForm";
 import { ServicePurchaseForm } from "../forms/ServicePurchaseForm";
@@ -16,10 +16,10 @@ export const Services = () => {
   const [userExists, setUserExists] = useState<boolean | null>(null);
   const { client, fetchClient } = useClient();
   async function handleClick() {
-    await fetchClient(email);
-    setUserExists(client ? true : false);
+    const isFound = await fetchClient(email);
+    setUserExists(isFound ? true : false);
   }
-  console.log(userExists);
+
   return (
     <>
       <Navbar />
