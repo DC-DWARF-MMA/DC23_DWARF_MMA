@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 type ServiceType = {
   ServiceName: string;
   Amount: number;
@@ -5,10 +7,10 @@ type ServiceType = {
 export interface ContractInterface {
   id: string;
   email: string;
-  endDate: Date;
+  endDate: Timestamp;
   paymentMethod: string;
   services: ServiceType[];
-  startDate: Date;
+  startDate: Timestamp;
   status: string;
 }
 

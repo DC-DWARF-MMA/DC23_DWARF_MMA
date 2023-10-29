@@ -12,10 +12,10 @@ function NavbarMemo() {
         <Toolbar>
           <Typography variant="h6">DWARF MMA</Typography>
           <Button component={Link} to="/" color="inherit">
-            Main Page
+            Client Page
           </Button>
           <Button component={Link} to="/Services" color="inherit">
-            Services
+            Get Services
           </Button>
           {email && (
             <>

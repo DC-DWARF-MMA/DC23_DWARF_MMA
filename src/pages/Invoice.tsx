@@ -1,19 +1,34 @@
 import Button from "@mui/material/Button";
 import { useInvoice } from "../services/InvoiceService";
+import { ContractInterface } from "../models/models";
+import { useEffect, useState } from "react";
+import { CircularProgress } from "@mui/material";
 
-export const Invoice = () => {
-  const { invoice, fetchInvoice } = useInvoice(
-    "XvOOXEwCVhOq6q6oha1X",
-    "piotrgarbowski@gmail.com"
-  );
+interface InvoiceInterface {
+  contract: ContractInterface;
+}
+
+export const Invoice = ({ contract }: InvoiceInterface) => {
+  const { invoice, fetchInvoice } = useInvoice(contract);
+  const [invoiceFetched, setInvoiceFetched] = useState(false);
 
   return (
     <div>
-      {invoice ? (
-        <h2>{JSON.stringify(invoice)}</h2>
+      {invoiceFetched ? (
+        invoice ? (
+          <h2>{JSON.stringify(invoice, null, 2)}</h2>
+        ) : (
+          <CircularProgress />
+        )
       ) : (
-        <Button variant="contained" onClick={fetchInvoice}>
-          Click here to generate invoice for ""
+        <Button
+          variant="contained"
+          onClick={() => {
+            fetchInvoice();
+            setInvoiceFetched(true);
+          }}
+        >
+          Click here to generate invoice
         </Button>
       )}
     </div>

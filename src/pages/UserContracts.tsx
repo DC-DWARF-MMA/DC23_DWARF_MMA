@@ -1,4 +1,3 @@
-import CircularProgress from "@mui/material/CircularProgress";
 import { useUserContracts } from "../services/FirebaseService";
 import { Contract } from "./Contract";
 
@@ -7,15 +6,20 @@ interface UserContractsInterface {
 }
 
 export const UserContracts = ({ userMail }: UserContractsInterface) => {
-  const contracts = useUserContracts(userMail);
+  const contracts = useUserContracts();
 
-  return contracts ? (
-    <div>
-      {contracts.map((contract) => (
-        <Contract contract={contract} key={contract.id} />
-      ))}
-    </div>
-  ) : (
-    <CircularProgress />
-  );
+  if (contracts?.length != 0) {
+    return (
+      <div>
+        <h2>Email: {userMail} </h2>
+        {contracts?.map((contract) => (
+          <div>
+            <Contract contract={contract} key={contract.id} />
+          </div>
+        ))}
+      </div>
+    );
+  } else {
+    return <div>No contracts available!</div>;
+  }
 };
