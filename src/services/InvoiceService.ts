@@ -17,7 +17,11 @@ export const useInvoice = (contractId: string, email: string) => {
     await fetchClient(email);
     if (contract && client && services) {
       const total = services
-        ?.filter((service) => contract?.services.includes(service.name))
+        ?.filter((service) =>
+          contract?.services
+            .map((service) => service.ServiceName)
+            .includes(service.name)
+        )
         .reduce((acc, service) => acc + service.price, 0);
       setInvoice({ id: contractId, client, contract, services, total });
     }

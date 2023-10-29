@@ -48,7 +48,7 @@ export const Services = () => {
         {userExists === true && (
           <>
             <Typography variant="h5">User: {email}</Typography>
-            <ServicePurchaseForm />
+            <ServicePurchaseForm email={email} />
           </>
         )}
       </div>

@@ -28,7 +28,7 @@ const App = () => {
     <div className="App">
       <Navbar />
       <h1>Dwarf-mma</h1>
-      <UserContracts userMail="miroslaw@gmail.com" />
+      <UserContracts userMail="piotrgarbowski@gmail.com" />
       <section>
         <Button variant="contained" onClick={saveToDb}>
           Click here to save to db
