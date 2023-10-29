@@ -1,11 +1,18 @@
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  addDoc,
+  setDoc,
+} from "firebase/firestore";
 import { db } from "../firebase";
 import {
   ClientInterface,
   ContractInterface,
   ServiceInterface,
 } from "../models/models";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 export const useContracts = () => {
   const [contracts, setContracts] = useState<ContractInterface[]>();
@@ -49,25 +56,30 @@ export const useContract = (id: string) => {
       }
       setContract({ ...(snapshot.data() as ContractInterface), id: id });
     })();
-  }, [setContract]);
+  }, [setContract, id]);
 
   return contract;
 };
 
-export const useClient = (email: string) => {
+export const useClient = () => {
   const [client, setClient] = useState<ClientInterface>();
-  useEffect(() => {
-    (async () => {
+  const [error, setError] = useState<boolean>(false);
+  const fetchClient = useCallback(
+    async (email: string) => {
       const clientDoc = doc(db, "clients", email);
       const snapshot = await getDoc(clientDoc);
-      if (!snapshot.exists()) {
-        throw new Error("Client not found");
+      if (snapshot.exists()) {
+        setClient({ ...(snapshot.data() as ClientInterface), id: snapshot.id });
+        return true;
+      } else {
+        setError(true);
+        return false;
       }
-      setClient({ ...(snapshot.data() as ClientInterface), id: snapshot.id });
-    })();
-  }, [setClient]);
+    },
+    [setClient, setError]
+  );
 
-  return client;
+  return { client, error, fetchClient };
 };
 
 export const useServices = () => {
@@ -86,4 +98,30 @@ export const useServices = () => {
   }, [setServices]);
 
   return services;
+};
+export const useSaveData = (collectionName: string) => {
+  const [isCompleted, setIsCompleted] = useState(false);
+  const [error, setError] = useState<string>("");
+
+  const saveData = useCallback(
+    async (data: any, primaryKey?: string) => {
+      setIsCompleted(false);
+      try {
+        // const customDocRef = doc(db, "yourCollectionName", documentId);
+        if (primaryKey) {
+          const customDocRef = doc(db, collectionName, primaryKey);
+          await setDoc(customDocRef, data);
+        } else {
+          await addDoc(collection(db, collectionName), data);
+        }
+      } catch (error) {
+        if (error instanceof Error) setError(error.message);
+        else setError(String(error));
+      }
+      setIsCompleted(true);
+    },
+    [collectionName]
+  );
+
+  return { saveData, isCompleted, error };
 };

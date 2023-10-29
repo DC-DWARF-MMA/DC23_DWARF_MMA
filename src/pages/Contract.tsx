@@ -13,7 +13,6 @@ export const Contract = ({ contract }: { contract: ContractInterface }) => {
         {contract.endDate.toString()}
       </h2>
       <h2>Payment method: {contract.paymentMethod}</h2>
-      <h2>Payment frequency: {contract.paymentFreq}</h2>
       <h2>Status: {contract.status}</h2>
     </div>
   );

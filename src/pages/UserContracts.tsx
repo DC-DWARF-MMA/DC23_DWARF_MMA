@@ -12,7 +12,7 @@ export const UserContracts = ({ userMail }: UserContractsInterface) => {
   return contracts ? (
     <div>
       {contracts.map((contract) => (
-        <Contract contract={contract} />
+        <Contract contract={contract} key={contract.id} />
       ))}
     </div>
   ) : (

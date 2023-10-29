@@ -3,8 +3,8 @@ import { useInvoice } from "../services/InvoiceService";
 
 export const Invoice = () => {
   const { invoice, fetchInvoice } = useInvoice(
-    "JmkmSHO5vsi1jHm8oHwt",
-    "miroslaw@gmail.com"
+    "XvOOXEwCVhOq6q6oha1X",
+    "piotrgarbowski@gmail.com"
   );
 
   return (

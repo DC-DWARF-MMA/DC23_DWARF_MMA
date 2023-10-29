@@ -8,19 +8,24 @@ import {
 
 export const useInvoice = (contractId: string, email: string) => {
   const contract = useContract(contractId);
-  const client = useClient(email);
+  const { client, fetchClient } = useClient();
   const services = useServices();
 
   const [invoice, setInvoice] = useState<InvoiceInterface>();
 
-  const fetchInvoice = useCallback(() => {
+  const fetchInvoice = useCallback(async () => {
+    await fetchClient(email);
     if (contract && client && services) {
       const total = services
-        ?.filter((service) => contract?.services.includes(service.name))
+        ?.filter((service) =>
+          contract?.services
+            .map((service) => service.ServiceName)
+            .includes(service.name)
+        )
         .reduce((acc, service) => acc + service.price, 0);
       setInvoice({ id: contractId, client, contract, services, total });
     }
-  }, [contract, client, services, setInvoice]);
+  }, [contract, client, services, setInvoice, fetchClient]);
 
   return { invoice, fetchInvoice };
 };
