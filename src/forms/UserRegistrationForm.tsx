@@ -3,9 +3,9 @@ import { ClientInterfaceIn } from "../models/models";
 import { TextField, Button, Grid, Container, Typography } from "@mui/material";
 import { useSaveData } from "../services/FirebaseService";
 import { Option, Select } from "../forms/formElements/Select";
+import { useUser } from "./formsContext/UserContext";
 type UserRegistrationPropsType = {
   email: string;
-  setUserExists: (value: boolean) => void;
 };
 const UserRegistrationForm: React.FC<UserRegistrationPropsType> = (props) => {
   const [formValues, setFormValues] = useState<ClientInterfaceIn>({
@@ -21,7 +21,7 @@ const UserRegistrationForm: React.FC<UserRegistrationPropsType> = (props) => {
     const { name, value } = event.target;
     setFormValues({ ...formValues, [name]: value });
   };
-
+  const { setEmail } = useUser();
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     saveData(formValues, props.email);
@@ -31,13 +31,14 @@ const UserRegistrationForm: React.FC<UserRegistrationPropsType> = (props) => {
   useEffect(() => {
     if (isCompleted) {
       const timeoutId = setTimeout(() => {
-        props.setUserExists(true);
+        setEmail(formValues.email);
       }, 2000);
       return () => {
         clearTimeout(timeoutId);
       };
     }
   }, [isCompleted]);
+
   return (
     <Container maxWidth="sm" style={{ marginTop: "10px" }}>
       {!isCompleted && (
@@ -128,7 +129,11 @@ const UserRegistrationForm: React.FC<UserRegistrationPropsType> = (props) => {
           </form>
         </>
       )}
-      {isCompleted && <h4>Form submitted!</h4>}
+      {isCompleted && (
+        <Typography variant="h5" justifyContent="center">
+          Form submitted!
+        </Typography>
+      )}
     </Container>
   );
 };
