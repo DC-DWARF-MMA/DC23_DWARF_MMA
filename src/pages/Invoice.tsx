@@ -1,10 +1,14 @@
 import Button from "@mui/material/Button";
 import { useInvoice } from "../services/InvoiceService";
+import { ContractInterface } from "../models/models";
 
-export const Invoice = () => {
+interface InvoiceInterface{
+  contract: ContractInterface
+}
+
+export const Invoice = ({contract} : InvoiceInterface) => {
   const { invoice, fetchInvoice } = useInvoice(
-    "XvOOXEwCVhOq6q6oha1X",
-    "piotrgarbowski@gmail.com"
+    contract
   );
 
   return (
@@ -13,7 +17,7 @@ export const Invoice = () => {
         <h2>{JSON.stringify(invoice)}</h2>
       ) : (
         <Button variant="contained" onClick={fetchInvoice}>
-          Click here to generate invoice for ""
+          Click here to generate invoice
         </Button>
       )}
     </div>

@@ -6,15 +6,14 @@ import {
   ServiceInterface,
 } from "../models/models";
 
-export const useInvoice = (contractId: string, email: string) => {
-  const contract = useContract(contractId);
+export const useInvoice = (contract : ContractInterface) => {
   const { client, fetchClient } = useClient();
   const services = useServices();
 
   const [invoice, setInvoice] = useState<InvoiceInterface>();
 
   const fetchInvoice = useCallback(async () => {
-    await fetchClient(email);
+    await fetchClient(contract.email);
     if (contract && client && services) {
       const total = services
         ?.filter((service) =>
@@ -23,7 +22,7 @@ export const useInvoice = (contractId: string, email: string) => {
             .includes(service.name)
         )
         .reduce((acc, service) => acc + service.price, 0);
-      setInvoice({ id: contractId, client, contract, services, total });
+      setInvoice({ id: contract.id, client, contract, services, total });
     }
   }, [contract, client, services, setInvoice, fetchClient]);
 

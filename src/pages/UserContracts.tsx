@@ -9,13 +9,21 @@ interface UserContractsInterface {
 export const UserContracts = ({ userMail }: UserContractsInterface) => {
   const contracts = useUserContracts(userMail);
 
-  return contracts ? (
-    <div>
-      {contracts.map((contract) => (
-        <Contract contract={contract} key={contract.id} />
-      ))}
-    </div>
-  ) : (
-    <CircularProgress />
-  );
+  if(contracts?.length != 0){
+    return (
+      <div>
+        <h2>Email: {userMail} </h2>
+        {contracts?.map((contract) => (
+          <div>
+          <Contract contract={contract} key={contract.id} />
+          </div>
+        ))}
+
+      </div>
+    );
+  }
+  else{
+    return (<div>No contracts available!<br/><br/></div>);
+  }
+  
 };

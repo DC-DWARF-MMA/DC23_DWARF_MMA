@@ -15,7 +15,7 @@ import {
 import { useEffect, useState, useCallback } from "react";
 
 export const useContracts = () => {
-  const [contracts, setContracts] = useState<ContractInterface[]>();
+  const [contracts, setContracts] = useState<ContractInterface[]>([]);
 
   useEffect(() => {
     (async () => {
@@ -34,11 +34,11 @@ export const useContracts = () => {
 };
 
 export const useUserContracts = (userMail: string) => {
-  const [userContracts, setUserContracts] = useState<ContractInterface[]>();
+  const [userContracts, setUserContracts] = useState<ContractInterface[]>([]);
   const allContracts = useContracts();
 
   useEffect(() => {
-    setUserContracts(allContracts?.filter((data) => data.email === userMail));
+    setUserContracts(prev => [...prev,...allContracts?.filter((data) => data.email === userMail)]);
   }, [userMail, allContracts, setUserContracts]);
 
   return userContracts;
