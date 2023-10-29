@@ -100,14 +100,6 @@ const UserRegistrationForm: React.FC<UserRegistrationPropsType> = (props) => {
                   <Option value={"male"}>Male</Option>
                   <Option value={"female"}>Female</Option>
                 </Select>
-                {/* <TextField
-              name="gender"
-              label="Gender"
-              variant="outlined"
-              fullWidth
-              value={formValues.gender}
-              onChange={handleInputChange}
-            /> */}
               </Grid>
               <Grid item xs={12}>
                 <TextField

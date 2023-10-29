@@ -56,7 +56,7 @@ export const useContract = (id: string) => {
       }
       setContract({ ...(snapshot.data() as ContractInterface), id: id });
     })();
-  }, [setContract]);
+  }, [setContract, id]);
 
   return contract;
 };
