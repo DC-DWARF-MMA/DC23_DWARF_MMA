@@ -13,6 +13,7 @@ import {
   ServiceInterface,
 } from "../models/models";
 import { useEffect, useState, useCallback } from "react";
+import { useUser } from "../forms/formsContext/UserContext";
 
 export const useContracts = () => {
   const [contracts, setContracts] = useState<ContractInterface[]>([]);
@@ -33,13 +34,17 @@ export const useContracts = () => {
   return contracts;
 };
 
-export const useUserContracts = (userMail: string) => {
+export const useUserContracts = () => {
   const [userContracts, setUserContracts] = useState<ContractInterface[]>([]);
   const allContracts = useContracts();
+  const user = useUser();
 
   useEffect(() => {
-    setUserContracts(prev => [...prev,...allContracts?.filter((data) => data.email === userMail)]);
-  }, [userMail, allContracts, setUserContracts]);
+    setUserContracts((prev) => [
+      ...prev,
+      ...allContracts?.filter((data) => data.email === user.email),
+    ]);
+  }, [user.email, allContracts, setUserContracts]);
 
   return userContracts;
 };
