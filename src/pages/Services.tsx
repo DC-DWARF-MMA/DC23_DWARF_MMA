@@ -6,7 +6,7 @@ import UserRegistrationForm from "../forms/UserRegistrationForm";
 import { ServicePurchaseForm } from "../forms/ServicePurchaseForm";
 import { UserEmailInputForm } from "../forms/UserEmailInputForm";
 import { useUser } from "../forms/formsContext/UserContext";
-const centerStyle = {
+export const centerStyle = {
   display: "flex",
   flexDirection: "column" as const,
   alignItems: "center",
