@@ -104,7 +104,9 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
     formData.append('text', text);
     formData.append('attachment', pdfInvoideFile);
 
-    axios.post(API_SEND_EMAIL_URL, formData, MULTIPART_FORM_DATA_HEADER)
+    axios.post(API_SEND_EMAIL_URL, formData, MULTIPART_FORM_DATA_HEADER).catch((error) => {
+      alert("Email was not sent! Server is probably down.");
+    });
   }
 
   return (
