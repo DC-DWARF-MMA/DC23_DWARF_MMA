@@ -19,6 +19,6 @@ const App = () => {
       <UserEmailInputForm />
     </div>
   );
-};
+}
 
 export default App;

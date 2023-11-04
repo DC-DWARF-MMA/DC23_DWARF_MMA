@@ -1,8 +1,5 @@
-import UserRegistrationForm from "../forms/UserRegistrationForm";
 import { useUser } from "../forms/formsContext/UserContext";
-import { useUserContracts } from "../services/FirebaseService";
 import { Navbar } from "../shared/Navbar";
-import { Invoice } from "./Invoice";
 import { UserContracts } from "./UserContracts";
 import { UserEmailInputForm } from "../forms/UserEmailInputForm";
 import "../App.css";
