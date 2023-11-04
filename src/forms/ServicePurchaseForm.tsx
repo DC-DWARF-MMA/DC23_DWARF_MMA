@@ -17,6 +17,8 @@ import {
   PaymentType,
   ServiceInterfaceIn,
 } from "../models/models";
+import axios from "axios";
+import { API_SEND_EMAIL_URL, MULTIPART_FORM_DATA_HEADER } from "../models/constants";
 type ServicePurchaseFormPropsType = {
   email: string;
 };
@@ -91,7 +93,22 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
       status: "Unpaid",
     };
     saveData(data);
+    sendEmail(props.email, 'Krotki tekst widoczny w mailu', new File([], 'test.pdf'));
   };
+
+  const sendEmail = (email: string, text: string, pdfInvoideFile: File) => {
+    const formData = new FormData();
+
+    formData.append('to', email);
+    formData.append('subject', 'Mail od Dwarf MMA');
+    formData.append('text', text);
+    formData.append('attachment', pdfInvoideFile);
+
+    axios.post(API_SEND_EMAIL_URL, formData, MULTIPART_FORM_DATA_HEADER).catch((error) => {
+      alert("Email was not sent! Server is probably down.");
+    });
+  }
+
   return (
     <div style={{ textAlign: "center" }}>
       {!isCompleted ? (
