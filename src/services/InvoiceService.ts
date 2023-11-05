@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useClient, useContract, useServices } from "./FirebaseService";
+import { useClient, useServices } from "./FirebaseService";
 import {
   ClientInterface,
   ContractInterface,
@@ -32,7 +32,7 @@ export const useInvoice = (contract: ContractInterface) => {
   return { invoice, fetchInvoice };
 };
 
-interface InvoiceInterface {
+export interface InvoiceInterface {
   id: string;
   client: ClientInterface;
   contract: ContractInterface;

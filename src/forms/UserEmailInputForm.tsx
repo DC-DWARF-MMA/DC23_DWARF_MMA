@@ -3,7 +3,6 @@ import { Typography, TextField, Button } from "@mui/material";
 import { useState } from "react";
 import UserRegistrationForm from "./UserRegistrationForm";
 import { useUser } from "./formsContext/UserContext";
-import { redirect } from "react-router";
 type UserExists = {
   state: boolean | null;
 };

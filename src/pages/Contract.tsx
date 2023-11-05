@@ -1,14 +1,9 @@
 import { ContractInterface } from "../models/models";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
-import { Link } from "react-router-dom";
-import { useState } from "react";
-import Button from "@mui/material/Button";
-import { Invoice } from "./Invoice";
+import { InvoiceGenerator } from "./InvoiceGenerator";
 
 export const Contract = ({ contract }: { contract: ContractInterface }) => {
-  const [showInvoice, setShowInvoice] = useState(false);
-
   return (
     <Box
       sx={{
@@ -45,7 +40,7 @@ export const Contract = ({ contract }: { contract: ContractInterface }) => {
         <p>{contract.paymentMethod}</p>
         <h2>Status:</h2>
         <p>{contract.status}</p>
-        <Invoice contract={contract} />
+        <InvoiceGenerator contract={contract} />
       </Paper>
     </Box>
   );
