@@ -9,7 +9,7 @@ export const centerStyle = {
   alignItems: "center",
   minHeight: "100vh",
 };
-
+  
 export const Services = () => {
   const { email } = useUser();
 

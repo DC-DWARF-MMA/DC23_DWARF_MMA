@@ -18,7 +18,7 @@ import {
   ServiceInterfaceIn,
 } from "../models/models";
 import axios from "axios";
-import { API_SEND_EMAIL_URL, MULTIPART_FORM_DATA_HEADER } from "../models/constants";
+import { API_SEND_EMAIL_URL, API_UPLOAD_FILE_URL, MULTIPART_FORM_DATA_HEADER, JSON_DATA_HEADER } from "../models/constants";
 type ServicePurchaseFormPropsType = {
   email: string;
 };
@@ -115,7 +115,8 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
     emailTextString += "for the total of $" + totalSelectedPrice.toString() + ". Thank you for your purchase. You can find the invoice in the .pdf file in the attachment.";
     console.log(emailTextString);
 
-    sendEmail(props.email, emailTextString, new File([], 'test.pdf'));
+    //sendEmail(props.email, emailTextString, new File([], 'test.pdf'));
+    uploadFileToDrive(data);
   };
 
   const sendEmail = (email: string, text: string, pdfInvoideFile: File) => {
@@ -128,6 +129,20 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
 
     axios.post(API_SEND_EMAIL_URL, formData, MULTIPART_FORM_DATA_HEADER).catch((error) => {
       alert("Email was not sent! Server is probably down.");
+    });
+  }
+
+  const uploadFileToDrive = (data: ContractInterfaceIn) => {
+    const request_json = {
+      "email": data.email,
+      "endDate": data.endDate,
+      "paymentMethod": data.paymentMethod,
+      "services": data.services,
+      "startDate": data.startDate,
+      "status": data.status
+    };
+    axios.post(API_UPLOAD_FILE_URL, request_json, JSON_DATA_HEADER).catch((error) => {
+      alert(error);
     });
   }
 
