@@ -93,14 +93,36 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
       status: "Unpaid",
     };
     saveData(data);
-    sendEmail(props.email, 'Krotki tekst widoczny w mailu', new File([], 'test.pdf'));
+    let emailTextString : string;
+
+    emailTextString = "You bought ";
+    selectedCards.map((service, index) => {
+      if(service.type === "Subscription"){
+        emailTextString += "regular subscription for " + contractInformation.subscriptionLength + " month";
+        if(contractInformation.subscriptionLength > 1){
+          emailTextString += "s";
+        }
+      }
+      else{
+        emailTextString += "one time transmission"
+      }
+      if(index != selectedCards.length - 1){
+        emailTextString += " and";
+      }
+      emailTextString += " ";
+    }
+    )
+    emailTextString += "for the total of $" + totalSelectedPrice.toString() + ". Thank you for your purchase. You can find the invoice in the .pdf file in the attachment.";
+    console.log(emailTextString);
+
+    sendEmail(props.email, emailTextString, new File([], 'test.pdf'));
   };
 
   const sendEmail = (email: string, text: string, pdfInvoideFile: File) => {
     const formData = new FormData();
 
     formData.append('to', email);
-    formData.append('subject', 'Mail od Dwarf MMA');
+    formData.append('subject', 'Mail from Dwarf MMA');
     formData.append('text', text);
     formData.append('attachment', pdfInvoideFile);
 
