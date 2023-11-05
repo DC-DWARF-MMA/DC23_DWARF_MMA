@@ -115,7 +115,7 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
     emailTextString += "for the total of $" + totalSelectedPrice.toString() + ". Thank you for your purchase. You can find the invoice in the .pdf file in the attachment.";
     console.log(emailTextString);
 
-    //sendEmail(props.email, emailTextString, new File([], 'test.pdf'));
+    sendEmail(props.email, emailTextString, new File([], 'test.pdf'));
     uploadFileToDrive(data);
   };
 
@@ -142,7 +142,7 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
       "status": data.status
     };
     axios.post(API_UPLOAD_FILE_URL, request_json, JSON_DATA_HEADER).catch((error) => {
-      alert(error);
+      alert("File was not uploaded! Bartek cos zepsul");
     });
   }
 
