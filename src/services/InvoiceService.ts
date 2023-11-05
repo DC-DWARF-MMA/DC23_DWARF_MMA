@@ -32,7 +32,7 @@ export const useInvoice = (contract: ContractInterface) => {
   return { invoice, fetchInvoice };
 };
 
-interface InvoiceInterface {
+export interface InvoiceInterface {
   id: string;
   client: ClientInterface;
   contract: ContractInterface;

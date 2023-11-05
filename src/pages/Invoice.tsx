@@ -3,12 +3,13 @@ import { useInvoice } from "../services/InvoiceService";
 import { ContractInterface } from "../models/models";
 import { useEffect, useState } from "react";
 import { CircularProgress } from "@mui/material";
+import {InvoiceInterface } from "../services/InvoiceService";
 
-interface InvoiceInterface {
+interface InvoiceContractInterface {
   contract: ContractInterface;
 }
 
-export const Invoice = ({ contract }: InvoiceInterface) => {
+export const Invoice = ({ contract }: InvoiceContractInterface) => {
   const { invoice, fetchInvoice } = useInvoice(contract);
   const [invoiceFetched, setInvoiceFetched] = useState(false);
 
