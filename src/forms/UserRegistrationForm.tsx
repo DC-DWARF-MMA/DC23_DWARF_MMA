@@ -37,7 +37,7 @@ const UserRegistrationForm: React.FC<UserRegistrationPropsType> = (props) => {
         clearTimeout(timeoutId);
       };
     }
-  }, [isCompleted]);
+  }, [isCompleted, formValues.email, setEmail]);
 
   return (
     <Container maxWidth="sm" style={{ marginTop: "10px" }}>

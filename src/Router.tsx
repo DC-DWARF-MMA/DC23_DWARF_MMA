@@ -4,13 +4,10 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
-import App from "./App";
 import { Services } from "./pages/Services";
 import { Home } from "./pages/Home";
 import { useUser } from "./forms/formsContext/UserContext";
-import { Invoice } from "./pages/Invoice";
 function AppRouter() {
-  const user = useUser();
   return (
     <Router>
       <Routes>

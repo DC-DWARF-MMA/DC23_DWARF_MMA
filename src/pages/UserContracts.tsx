@@ -8,7 +8,7 @@ interface UserContractsInterface {
 export const UserContracts = ({ userMail }: UserContractsInterface) => {
   const contracts = useUserContracts();
 
-  if (contracts?.length != 0) {
+  if (contracts?.length !== 0) {
     return (
       <div>
         <h2>Email: {userMail} </h2>

@@ -1,8 +1,5 @@
 import { Navbar } from "../shared/Navbar";
-import { Typography, TextField, Button } from "@mui/material";
-import { useState, useEffect } from "react";
-import { useClient } from "../services/FirebaseService";
-import UserRegistrationForm from "../forms/UserRegistrationForm";
+import { Typography } from "@mui/material";
 import { ServicePurchaseForm } from "../forms/ServicePurchaseForm";
 import { UserEmailInputForm } from "../forms/UserEmailInputForm";
 import { useUser } from "../forms/formsContext/UserContext";
