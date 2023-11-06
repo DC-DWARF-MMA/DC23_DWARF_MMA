@@ -2,6 +2,8 @@ import { ContractInterface } from "../models/models";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import { InvoiceGenerator } from "./InvoiceGenerator";
+import Button from "@mui/material/Button";
+import { Link } from "react-router-dom";
 
 export const Contract = ({ contract }: { contract: ContractInterface }) => {
   return (
@@ -41,6 +43,9 @@ export const Contract = ({ contract }: { contract: ContractInterface }) => {
         <h2>Status:</h2>
         <p>{contract.status}</p>
         <InvoiceGenerator contract={contract} />
+        <Button component={Link} to={"/Edit?id=" + contract.id} color="inherit">
+            Click To Edit Contract
+        </Button>
       </Paper>
     </Box>
   );
