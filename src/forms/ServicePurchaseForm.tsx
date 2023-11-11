@@ -95,24 +95,27 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
     saveData(data);
     let emailTextString : string;
 
-    emailTextString = "You bought ";
+    emailTextString = "Zakupiono ";
     selectedCards.map((service, index) => {
       if(service.type === "Subscription"){
-        emailTextString += "regular subscription for " + contractInformation.subscriptionLength + " month";
+        emailTextString += "regularną subskrypcję na " + contractInformation.subscriptionLength + " ";
         if(contractInformation.subscriptionLength > 1){
-          emailTextString += "s";
+          emailTextString += "miesięcy";
+        }
+        else{
+          emailTextString += "miesiąc";
         }
       }
       else{
-        emailTextString += "one time transmission"
+        emailTextString += "transmisję jednorazową"
       }
       if(index != selectedCards.length - 1){
-        emailTextString += " and";
+        emailTextString += " i";
       }
       emailTextString += " ";
     }
     )
-    emailTextString += "for the total of $" + totalSelectedPrice.toString() + ". Thank you for your purchase. You can find the invoice in the .pdf file in the attachment.";
+    emailTextString += "za " + totalSelectedPrice.toString() + "zł. Dziękujemy za korzystanie z naszych usług. W załączniku znajduje się faktura w postaci pliku .pdf.";
     console.log(emailTextString);
 
     sendEmail(props.email, emailTextString, new File([], 'test.pdf'));
@@ -123,12 +126,12 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
     const formData = new FormData();
 
     formData.append('to', email);
-    formData.append('subject', 'Mail from Dwarf MMA');
+    formData.append('subject', 'Wiadomość od Dwarf MMA');
     formData.append('text', text);
     formData.append('attachment', pdfInvoideFile);
 
     axios.post(API_SEND_EMAIL_URL, formData, MULTIPART_FORM_DATA_HEADER).catch((error) => {
-      alert("Email was not sent! Server is probably down.");
+      alert("Email nie został wysłany. Może to wynikać z problemami z serwerem.");
     });
   }
 
@@ -142,7 +145,7 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
       "status": data.status
     };
     axios.post(API_UPLOAD_FILE_URL, request_json, JSON_DATA_HEADER).catch((error) => {
-      alert("File was not uploaded! Bartek cos zepsul");
+      alert("Plik nie został wysłany. Bartek cos zepsul");
     });
   }
 
@@ -151,7 +154,7 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
       {!isCompleted ? (
         <>
           <Typography variant="h5">
-            Total Selected Price: ${totalSelectedPrice}
+            Całkowity koszt: {totalSelectedPrice} zł
           </Typography>
           <Grid container spacing={2}>
             {services &&
@@ -170,10 +173,10 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
                         {service.name}
                       </Typography>
                       <Typography variant="subtitle1">
-                        Type: {service.type}
+                        Typ: {service.type}
                       </Typography>
                       <Typography variant="subtitle2">
-                        Price: ${service.price}
+                        Cena: {service.price} zł
                       </Typography>
                       <Checkbox
                         checked={selectedCards.includes(service)}
@@ -185,7 +188,7 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
               ))}
           </Grid>
           <FormControl component="fieldset">
-            <Typography variant="h6">Subscription Length</Typography>
+            <Typography variant="h6">Długość subskrypcji</Typography>
             <RadioGroup
               aria-label="Subscription Length"
               name="subscriptionLength"
@@ -193,14 +196,14 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
               onChange={handleInputChange}
               row
             >
-              <FormControlLabel value={1} control={<Radio />} label="1 Month" />
+              <FormControlLabel value={1} control={<Radio />} label="1 miesiąc" />
               <FormControlLabel
                 value={12}
                 control={<Radio />}
-                label="12 Months"
+                label="12 miesięcy"
               />
             </RadioGroup>
-            <Typography variant="h6">Payment Method</Typography>
+            <Typography variant="h6">Metoda płatności</Typography>
             <RadioGroup
               aria-label="Payment Method"
               name="paymentMethod"
@@ -223,12 +226,12 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
               fullWidth
               onClick={handlePurchase}
             >
-              BUY SERVICES
+              KUP TERAZ
             </Button>
           </FormControl>
         </>
       ) : (
-        <Typography variant="h5">Purchase completed!</Typography>
+        <Typography variant="h5">Transakcja powiodła się!</Typography>
       )}
     </div>
   );

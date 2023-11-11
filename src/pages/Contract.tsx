@@ -22,21 +22,21 @@ export const Contract = ({ contract }: { contract: ContractInterface }) => {
       }}
     >
       <Paper elevation={3}>
-        <h2>Services:</h2>
+        <h2>Usługi:</h2>
         <div>
           {contract.services.map((service, index) => (
             <div key={index}>
               <p>
-                Name: {service.ServiceName}, Amount: {service.Amount.toString()}
+                Nazwa: {service.ServiceName}
               </p>
             </div>
           ))}
         </div>
-        <h2>Start date:</h2>
+        <h2>Data zakupu:</h2>
         <p>{contract.startDate.toDate().toDateString()}</p>
-        <h2>End date:</h2>
+        <h2>Data zakończenia umowy:</h2>
         <p>{contract.endDate.toDate().toDateString()}</p>
-        <h2>Payment method:</h2>
+        <h2>Metoda płatności:</h2>
         <p>{contract.paymentMethod}</p>
         <h2>Status:</h2>
         <p>{contract.status}</p>

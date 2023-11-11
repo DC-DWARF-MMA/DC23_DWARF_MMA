@@ -44,7 +44,7 @@ const UserRegistrationForm: React.FC<UserRegistrationPropsType> = (props) => {
       {!isCompleted && (
         <>
           <Typography variant="h5">
-            User not found. Please fill your data:
+            Nie znaleziono użytkownika. Stwórz nowe konto:
           </Typography>
           <form onSubmit={handleSubmit}>
             <Grid container spacing={2}>
@@ -98,8 +98,8 @@ const UserRegistrationForm: React.FC<UserRegistrationPropsType> = (props) => {
                     }
                   }}
                 >
-                  <Option value={"male"}>Male</Option>
-                  <Option value={"female"}>Female</Option>
+                  <Option value={"male"}>Mężczyzna</Option>
+                  <Option value={"female"}>Kobieta</Option>
                 </Select>
               </Grid>
               <Grid item xs={12}>
@@ -122,7 +122,7 @@ const UserRegistrationForm: React.FC<UserRegistrationPropsType> = (props) => {
                 style={{ display: "flex", justifyContent: "center" }}
               >
                 <Button type="submit" variant="contained" color="primary">
-                  Submit
+                  Zatwierdź
                 </Button>
               </Grid>
             </Grid>
@@ -131,7 +131,7 @@ const UserRegistrationForm: React.FC<UserRegistrationPropsType> = (props) => {
       )}
       {isCompleted && (
         <Typography variant="h5" justifyContent="center">
-          Form submitted!
+          Wysłano formularz!
         </Typography>
       )}
     </Container>

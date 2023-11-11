@@ -23,7 +23,7 @@ export const UserEmailInputForm = () => {
     <>
       {email === null && (
         <>
-          <Typography variant="h5">Please enter your e-mail:</Typography>
+          <Typography variant="h5">Wpisz E-mail:</Typography>
           <TextField
             label="e-mail"
             variant="outlined"
@@ -35,7 +35,7 @@ export const UserEmailInputForm = () => {
             onClick={handleClick}
             style={{ marginTop: "5px" }}
           >
-            Submit
+            Zatwierdź
           </Button>
         </>
       )}

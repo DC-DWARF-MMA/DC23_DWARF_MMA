@@ -12,10 +12,10 @@ function NavbarMemo() {
         <Toolbar>
           <Typography variant="h6">DWARF MMA</Typography>
           <Button component={Link} to="/" color="inherit">
-            Client Page
+            Strona klienta
           </Button>
           <Button component={Link} to="/Services" color="inherit">
-            Get Services
+            Zakup usług
           </Button>
           {email && (
             <>
@@ -23,7 +23,7 @@ function NavbarMemo() {
                 variant="h6"
                 style={{ marginLeft: "auto", marginRight: "5px" }}
               >
-                User: {email}
+                Użytkownik: {email}
               </Typography>
               <Button onClick={() => setEmail(null)} color="inherit">
                 <LogoutIcon />
