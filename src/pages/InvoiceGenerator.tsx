@@ -3,6 +3,7 @@ import { useInvoice } from "../services/InvoiceService";
 import jsPDF from "jspdf";
 import { ContractInterface } from "../models/models";
 import { useEffect } from "react";
+import '../fonts/Lato-Regular-normal';
 
 export const InvoiceGenerator = ({
   contract,
@@ -39,7 +40,7 @@ export const InvoiceGenerator = ({
     doc.text("Usługi:", 40, 200);
     doc.line(40, 210, 550, 210);
     // Add item details
-    doc.setFontSize(12);
+    doc.setFontSize(10);
     let yOffset = 240;
     let total = 0;
 
@@ -49,9 +50,9 @@ export const InvoiceGenerator = ({
           .filter((service) => service.name === item.ServiceName)
           .at(0)?.price ?? 0;
       doc.text(`Usługa: ${item.ServiceName}`, 40, yOffset);
-      doc.text(`Długość: ${item.Amount}`, 300, yOffset);
-      doc.text(`Cena: ${itemPrice} zł`, 400, yOffset);
-      doc.text(`Całkowita cena: ${itemPrice * item.Amount} zł`, 500, yOffset);
+      doc.text(`Długość: ${item.Amount}`, 240, yOffset);
+      doc.text(`Cena: ${itemPrice} zł`, 340, yOffset);
+      doc.text(`Całkowita cena: ${itemPrice * item.Amount} zł`, 440, yOffset);
       total += itemPrice * item.Amount;
       yOffset += 20;
     });
