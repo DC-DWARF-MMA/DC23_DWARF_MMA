@@ -18,24 +18,25 @@ export const InvoiceGenerator = ({
   const generateInvoice = async () => {
     if (!invoice) return;
     const doc = new jsPDF("p", "pt");
+    doc.setFont('Lato-Regular', 'normal');
     doc.setFontSize(24);
-    doc.text("Invoice", 40, 60);
+    doc.text("Faktura", 40, 60);
     doc.setFontSize(10);
-    doc.text(`Invoice Number: ${invoice.id}`, 40, 90);
+    doc.text(`Identyfikator faktury: ${invoice.id}`, 40, 90);
     doc.text(
-      "Date: " + invoice.contract.startDate.toDate().toDateString(),
+      "Data: " + invoice.contract.startDate.toDate().toDateString(),
       40,
       110
     );
     doc.text(
-      `Customer Name: ${invoice.client.firstName} ${invoice.client.lastName}`,
+      `Nazwa klienta: ${invoice.client.firstName} ${invoice.client.lastName}`,
       40,
       130
     );
-    doc.text(`Customer Email Address: ${invoice.client.email}`, 40, 150);
+    doc.text(`Adres e-mail klienta: ${invoice.client.email}`, 40, 150);
 
     doc.setFontSize(14);
-    doc.text("Services:", 40, 200);
+    doc.text("Usługi:", 40, 200);
     doc.line(40, 210, 550, 210);
     // Add item details
     doc.setFontSize(12);
@@ -47,24 +48,24 @@ export const InvoiceGenerator = ({
         invoice.services
           .filter((service) => service.name === item.ServiceName)
           .at(0)?.price ?? 0;
-      doc.text(`Service: ${item.ServiceName}`, 40, yOffset);
-      doc.text(`Quantity: ${item.Amount}`, 300, yOffset);
-      doc.text(`Price: ${itemPrice}`, 400, yOffset);
-      doc.text(`Total: ${itemPrice * item.Amount}`, 500, yOffset);
+      doc.text(`Usługa: ${item.ServiceName}`, 40, yOffset);
+      doc.text(`Długość: ${item.Amount}`, 300, yOffset);
+      doc.text(`Cena: ${itemPrice} zł`, 400, yOffset);
+      doc.text(`Całkowita cena: ${itemPrice * item.Amount} zł`, 500, yOffset);
       total += itemPrice * item.Amount;
       yOffset += 20;
     });
     // Add total
     doc.line(40, yOffset, 550, yOffset);
     doc.setFontSize(14);
-    doc.text(`Total: ${total}`, 400, yOffset + 30);
+    doc.text(`Całkowita cena: ${total} zł`, 400, yOffset + 30);
 
     doc.save("testPDF.pdf");
   };
 
   return (
     <Button variant="contained" onClick={generateInvoice}>
-      Click here to generate invoice
+      Wygeneruj fakturę
     </Button>
   );
 };
