@@ -6,10 +6,11 @@ import "../App.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { JSON_DATA_HEADER } from "../models/constants";
+import { useProcess } from "../forms/formsContext/ProcessContext";
 
 export const Home = () => {
   const mail = useUser();
-  const [processId, setProcessId] = useState();
+  const {processId, setProcessId} = useProcess();
 
   const startProcess = async () => {
     const data = await axios

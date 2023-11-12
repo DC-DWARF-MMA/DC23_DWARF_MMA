@@ -19,6 +19,8 @@ import {
 } from "../models/models";
 import axios from "axios";
 import { API_SEND_EMAIL_URL, API_UPLOAD_FILE_URL, MULTIPART_FORM_DATA_HEADER, JSON_DATA_HEADER } from "../models/constants";
+import { Home } from "../pages/Home";
+import { useProcess } from "../forms/formsContext/ProcessContext";
 type ServicePurchaseFormPropsType = {
   email: string;
 };
@@ -30,6 +32,7 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
   props
 ) => {
   const services = useServices();
+  const {processId, setProcessId} = useProcess();
   const { saveData, isCompleted } = useSaveData("contracts");
   const [selectedCards, setSelectedCards] = useState<ServiceInterfaceIn[]>([]);
   const [contractInformation, setContractInformation] =
@@ -76,6 +79,34 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
     }
     return endDate;
   };
+
+  const completeTask = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/engine-rest/task?processDefinitionKey=Process_190revr");
+  
+      const taskToComplete = response.data.find((task: { processInstanceId: string; }) => task.processInstanceId === processId);
+
+      if (taskToComplete) {
+        const completeResponse = await axios.post(
+          `http://localhost:8080/engine-rest/task/${taskToComplete.id}/complete`,
+          {},
+          JSON_DATA_HEADER
+        );
+
+        if (completeResponse.status === 204) {
+          console.log(`Task with id ${taskToComplete.id} completed successfully.`);
+        } else {
+          console.log(`Could not complete task with id ${taskToComplete.id}.`);
+        }
+      } else {
+        console.log("No matching task found to complete.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Could not complete task!");
+    }
+  };
+
   const handlePurchase = () => {
     console.log("handlePurchase");
     const data: ContractInterfaceIn = {
@@ -93,6 +124,7 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
       status: "Unpaid",
     };
     saveData(data);
+    completeTask();
     let emailTextString : string;
 
     emailTextString = "Zakupiono ";
