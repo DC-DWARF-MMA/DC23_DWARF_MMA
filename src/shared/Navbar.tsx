@@ -9,10 +9,7 @@ function NavbarMemo() {
 
   return (
     <div>
-      <AppBar
-        position="static"
-        style={{ marginBottom: "20px", backgroundColor: "red" }}
-      >
+      <AppBar position="static" style={{ backgroundColor: "red" }}>
         <Toolbar>
           <Typography variant="h6">DWARF MMA</Typography>
           <Button component={Link} to="/" color="inherit">
