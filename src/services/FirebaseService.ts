@@ -42,7 +42,9 @@ export const useUserContracts = () => {
   useEffect(() => {
     setUserContracts((prev) => [
       ...prev,
-      ...allContracts?.filter((data) => data.email === user.email),
+      ...allContracts?.filter(
+        (data) => data.email === user.email || user.email === "admin@admin.com"
+      ),
     ]);
   }, [user.email, allContracts, setUserContracts]);
 
