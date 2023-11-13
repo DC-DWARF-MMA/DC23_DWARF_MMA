@@ -43,8 +43,9 @@ export const Contract = ({ contract }: { contract: ContractInterface }) => {
         <h2>Status:</h2>
         <p>{contract.status}</p>
         <InvoiceGenerator contract={contract} />
-        <Button component={Link} to={"/Edit?id=" + contract.id} color="inherit">
-            Click To Edit Contract
+        <p> </p>
+        <Button variant="contained" component={Link} to={"/Edit?id=" + contract.id}>
+            Edytuj Kontrakt
         </Button>
       </Paper>
     </Box>
