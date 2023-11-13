@@ -7,10 +7,17 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { JSON_DATA_HEADER } from "../models/constants";
 import { useProcess } from "../forms/formsContext/ProcessContext";
-
+import background from "../images/background.png";
+const backgroundStyle = {
+  backgroundImage: `url(${background})`,
+  backgroundSize: "cover",
+  backgroundRepeat: "no-repeat",
+  backgroundPosition: "center",
+  minHeight: "100vh",
+};
 export const Home = () => {
   const mail = useUser();
-  const {processId, setProcessId} = useProcess();
+  const { processId, setProcessId } = useProcess();
 
   const startProcess = async () => {
     const data = await axios
@@ -33,7 +40,7 @@ export const Home = () => {
   }, []);
 
   return (
-    <div className="App">
+    <div className="App" style={backgroundStyle}>
       <Navbar />
       <h1>DWARF MMA</h1>
       {mail.email ? (

@@ -288,7 +288,7 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
             </RadioGroup>
             <Button
               variant="contained"
-              color="primary"
+              color="error"
               fullWidth
               onClick={handlePurchase}
             >

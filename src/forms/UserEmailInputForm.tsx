@@ -32,6 +32,7 @@ export const UserEmailInputForm = () => {
           />
           <Button
             variant="contained"
+            color="error"
             onClick={handleClick}
             style={{ marginTop: "5px" }}
           >

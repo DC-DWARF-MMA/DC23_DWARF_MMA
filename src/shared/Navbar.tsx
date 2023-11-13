@@ -3,12 +3,16 @@ import { AppBar, Toolbar, Typography, Button } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Link } from "react-router-dom";
 import { useUser } from "../forms/formsContext/UserContext";
-
+import background from "../images/background.png";
 function NavbarMemo() {
   const { email, setEmail } = useUser();
+
   return (
     <div>
-      <AppBar position="static" style={{ marginBottom: "20px" }}>
+      <AppBar
+        position="static"
+        style={{ marginBottom: "20px", backgroundColor: "red" }}
+      >
         <Toolbar>
           <Typography variant="h6">DWARF MMA</Typography>
           <Button component={Link} to="/" color="inherit">
