@@ -3,6 +3,7 @@ import { useSaveData, useServices } from "../services/FirebaseService";
 import {
   Card,
   CardContent,
+  CardMedia,
   Typography,
   Grid,
   Checkbox,
@@ -18,9 +19,16 @@ import {
   ServiceInterfaceIn,
 } from "../models/models";
 import axios from "axios";
-import { API_SEND_EMAIL_URL, API_UPLOAD_FILE_URL, MULTIPART_FORM_DATA_HEADER, JSON_DATA_HEADER } from "../models/constants";
-import { Home } from "../pages/Home";
+import {
+  API_SEND_EMAIL_URL,
+  API_UPLOAD_FILE_URL,
+  MULTIPART_FORM_DATA_HEADER,
+  JSON_DATA_HEADER,
+} from "../models/constants";
 import { useProcess } from "../forms/formsContext/ProcessContext";
+import { ClassNames } from "@emotion/react";
+import background from "../images/background.png";
+
 type ServicePurchaseFormPropsType = {
   email: string;
 };
@@ -32,7 +40,7 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
   props
 ) => {
   const services = useServices();
-  const {processId, setProcessId} = useProcess();
+  const { processId, setProcessId } = useProcess();
   const { saveData, isCompleted } = useSaveData("contracts");
   const [selectedCards, setSelectedCards] = useState<ServiceInterfaceIn[]>([]);
   const [contractInformation, setContractInformation] =
@@ -82,9 +90,14 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
 
   const completeTask = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/engine-rest/task?processDefinitionKey=Process_190revr");
-  
-      const taskToComplete = response.data.find((task: { processInstanceId: string; }) => task.processInstanceId === processId);
+      const response = await axios.get(
+        "http://localhost:8080/engine-rest/task?processDefinitionKey=Process_190revr"
+      );
+
+      const taskToComplete = response.data.find(
+        (task: { processInstanceId: string }) =>
+          task.processInstanceId === processId
+      );
 
       if (taskToComplete) {
         const completeResponse = await axios.post(
@@ -94,7 +107,9 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
         );
 
         if (completeResponse.status === 204) {
-          console.log(`Task with id ${taskToComplete.id} completed successfully.`);
+          console.log(
+            `Task with id ${taskToComplete.id} completed successfully.`
+          );
         } else {
           console.log(`Could not complete task with id ${taskToComplete.id}.`);
         }
@@ -125,61 +140,70 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
     };
     saveData(data);
     completeTask();
-    let emailTextString : string;
+    let emailTextString: string;
 
     emailTextString = "Zakupiono ";
     selectedCards.map((service, index) => {
-      if(service.type === "Subscription"){
-        emailTextString += "regularną subskrypcję na " + contractInformation.subscriptionLength + " ";
-        if(contractInformation.subscriptionLength > 1){
+      if (service.type === "Subscription") {
+        emailTextString +=
+          "regularną subskrypcję na " +
+          contractInformation.subscriptionLength +
+          " ";
+        if (contractInformation.subscriptionLength > 1) {
           emailTextString += "miesięcy";
-        }
-        else{
+        } else {
           emailTextString += "miesiąc";
         }
+      } else {
+        emailTextString += "transmisję jednorazową";
       }
-      else{
-        emailTextString += "transmisję jednorazową"
-      }
-      if(index != selectedCards.length - 1){
+      if (index != selectedCards.length - 1) {
         emailTextString += " i";
       }
       emailTextString += " ";
-    }
-    )
-    emailTextString += "za " + totalSelectedPrice.toString() + "zł. Dziękujemy za korzystanie z naszych usług. W załączniku znajduje się faktura w postaci pliku .pdf.";
+    });
+    emailTextString +=
+      "za " +
+      totalSelectedPrice.toString() +
+      "zł. Dziękujemy za korzystanie z naszych usług. W załączniku znajduje się faktura w postaci pliku .pdf.";
     console.log(emailTextString);
 
-    sendEmail(props.email, emailTextString, new File([], 'test.pdf'));
+    sendEmail(props.email, emailTextString, new File([], "test.pdf"));
     uploadFileToDrive(data);
   };
 
   const sendEmail = (email: string, text: string, pdfInvoideFile: File) => {
     const formData = new FormData();
 
-    formData.append('to', email);
-    formData.append('subject', 'Wiadomość od Dwarf MMA');
-    formData.append('text', text);
-    formData.append('attachment', pdfInvoideFile);
+    formData.append("to", email);
+    formData.append("subject", "Wiadomość od Dwarf MMA");
+    formData.append("text", text);
+    formData.append("attachment", pdfInvoideFile);
 
-    axios.post(API_SEND_EMAIL_URL, formData, MULTIPART_FORM_DATA_HEADER).catch((error) => {
-      alert("Email nie został wysłany. Może to wynikać z problemami z serwerem.");
-    });
-  }
+    axios
+      .post(API_SEND_EMAIL_URL, formData, MULTIPART_FORM_DATA_HEADER)
+      .catch((error) => {
+        alert(
+          "Email nie został wysłany. Może to wynikać z problemami z serwerem."
+        );
+      });
+  };
 
   const uploadFileToDrive = (data: ContractInterfaceIn) => {
     const request_json = {
-      "email": data.email,
-      "endDate": data.endDate,
-      "paymentMethod": data.paymentMethod,
-      "services": data.services,
-      "startDate": data.startDate,
-      "status": data.status
+      email: data.email,
+      endDate: data.endDate,
+      paymentMethod: data.paymentMethod,
+      services: data.services,
+      startDate: data.startDate,
+      status: data.status,
     };
-    axios.post(API_UPLOAD_FILE_URL, request_json, JSON_DATA_HEADER).catch((error) => {
-      alert("Plik nie został wysłany. Bartek cos zepsul");
-    });
-  }
+    axios
+      .post(API_UPLOAD_FILE_URL, request_json, JSON_DATA_HEADER)
+      .catch((error) => {
+        alert("Plik nie został wysłany. Bartek cos zepsul");
+      });
+  };
 
   return (
     <div style={{ textAlign: "center" }}>
@@ -200,6 +224,12 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
                   minWidth={300}
                 >
                   <Card>
+                    <CardMedia
+                      component="img"
+                      alt={service.name}
+                      height="140" // Set the desired height
+                      image={background} // Replace with the actual path to your image
+                    />
                     <CardContent>
                       <Typography variant="h6" component="div">
                         {service.name}
@@ -228,7 +258,11 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
               onChange={handleInputChange}
               row
             >
-              <FormControlLabel value={1} control={<Radio />} label="1 miesiąc" />
+              <FormControlLabel
+                value={1}
+                control={<Radio />}
+                label="1 miesiąc"
+              />
               <FormControlLabel
                 value={12}
                 control={<Radio />}
