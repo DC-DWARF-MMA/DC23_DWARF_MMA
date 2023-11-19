@@ -121,7 +121,7 @@ const UserRegistrationForm: React.FC<UserRegistrationPropsType> = (props) => {
                 xs={12}
                 style={{ display: "flex", justifyContent: "center" }}
               >
-                <Button type="submit" variant="contained" color="primary">
+                <Button type="submit" variant="contained" color="error">
                   Zatwierdź
                 </Button>
               </Grid>

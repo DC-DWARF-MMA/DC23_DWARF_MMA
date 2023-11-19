@@ -20,7 +20,13 @@ export const UserEmailInputForm = () => {
     }
   }
   return (
-    <>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column" as const,
+        alignItems: "center",
+      }}
+    >
       {email === null && (
         <>
           <Typography variant="h5">Wpisz E-mail:</Typography>
@@ -32,6 +38,7 @@ export const UserEmailInputForm = () => {
           />
           <Button
             variant="contained"
+            color="error"
             onClick={handleClick}
             style={{ marginTop: "5px" }}
           >
@@ -44,6 +51,6 @@ export const UserEmailInputForm = () => {
           <UserRegistrationForm email={emailInput} />
         </>
       )}
-    </>
+    </div>
   );
 };

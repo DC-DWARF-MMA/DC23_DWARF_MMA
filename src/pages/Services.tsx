@@ -3,13 +3,18 @@ import { Typography } from "@mui/material";
 import { ServicePurchaseForm } from "../forms/ServicePurchaseForm";
 import { UserEmailInputForm } from "../forms/UserEmailInputForm";
 import { useUser } from "../forms/formsContext/UserContext";
+import background from "../images/background.png";
 export const centerStyle = {
+  backgroundImage: `url(${background})`,
+  backgroundSize: "cover",
+  backgroundRepeat: "no-repeat",
+  backgroundPosition: "center",
+  minHeight: "100vh",
   display: "flex",
   flexDirection: "column" as const,
   alignItems: "center",
-  minHeight: "100vh",
 };
-  
+
 export const Services = () => {
   const { email } = useUser();
 
