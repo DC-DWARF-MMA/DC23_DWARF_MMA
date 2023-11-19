@@ -3,7 +3,7 @@ import { useInvoice } from "../services/InvoiceService";
 import jsPDF from "jspdf";
 import { ContractInterface } from "../models/models";
 import { useEffect } from "react";
-import '../fonts/Lato-Regular-normal';
+import "../fonts/Lato-Regular-normal";
 
 export const InvoiceGenerator = ({
   contract,
@@ -19,7 +19,7 @@ export const InvoiceGenerator = ({
   const generateInvoice = async () => {
     if (!invoice) return;
     const doc = new jsPDF("p", "pt");
-    doc.setFont('Lato-Regular', 'normal');
+    doc.setFont("Lato-Regular", "normal");
     doc.setFontSize(24);
     doc.text("Faktura", 40, 60);
     doc.setFontSize(10);
@@ -61,7 +61,7 @@ export const InvoiceGenerator = ({
     doc.setFontSize(14);
     doc.text(`Całkowita cena: ${total} zł`, 400, yOffset + 30);
 
-    doc.save("testPDF.pdf");
+    doc.save("faktura.pdf");
   };
 
   return (

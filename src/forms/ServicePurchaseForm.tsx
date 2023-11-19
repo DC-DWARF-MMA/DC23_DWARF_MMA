@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useSaveData, useServices } from "../services/FirebaseService";
+import { useClient, useSaveData, useServices } from "../services/FirebaseService";
 import {
   Card,
   CardContent,
@@ -14,13 +14,19 @@ import {
 } from "@mui/material";
 import {
   ContractInterfaceIn,
+  ContractInterface,
   PaymentType,
   ServiceInterfaceIn,
+  ClientInterface,
+  ServiceInterface,
 } from "../models/models";
 import axios from "axios";
 import { API_SEND_EMAIL_URL, API_UPLOAD_FILE_URL, MULTIPART_FORM_DATA_HEADER, JSON_DATA_HEADER } from "../models/constants";
 import { Home } from "../pages/Home";
 import { useProcess } from "../forms/formsContext/ProcessContext";
+import { InvoiceInterface, generatePDFInvoiceFile } from "../services/InvoiceService";
+import useEmailSender from "./SendEmail";
+import { Timestamp } from "firebase/firestore";
 type ServicePurchaseFormPropsType = {
   email: string;
 };
@@ -33,6 +39,8 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
 ) => {
   const services = useServices();
   const {processId, setProcessId} = useProcess();
+  const { client, fetchClient } = useClient();
+  const { sendEmail } = useEmailSender();
   const { saveData, isCompleted } = useSaveData("contracts");
   const [selectedCards, setSelectedCards] = useState<ServiceInterfaceIn[]>([]);
   const [contractInformation, setContractInformation] =
@@ -106,8 +114,8 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
       alert("Could not complete task!");
     }
   };
-
-  const handlePurchase = () => {
+  
+  const handlePurchase = async () => {
     console.log("handlePurchase");
     const data: ContractInterfaceIn = {
       email: props.email,
@@ -150,21 +158,59 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
     emailTextString += "za " + totalSelectedPrice.toString() + "zł. Dziękujemy za korzystanie z naszych usług. W załączniku znajduje się faktura w postaci pliku .pdf.";
     console.log(emailTextString);
 
-    sendEmail(props.email, emailTextString, new File([], 'test.pdf'));
+    var farmazonskieSerwisy: ServiceInterface[] = selectedCards.map((service) => {
+      return {
+        name: service.name,
+        type: service.type,
+        price: service.price
+      } as ServiceInterface;
+    });
+
+
+    var farmazon_data = {...data, 
+      id: generateFarmazonId(20), 
+      endDate: Timestamp.fromDate(data.endDate),
+      startDate: Timestamp.fromDate(data.startDate)} as ContractInterface;
+
+    let invoice : InvoiceInterface = {
+      id: generateFarmazonId(20),
+      client: {
+        firstName: "Marek",
+        lastName: "Brandt",
+        email: props.email
+      } as ClientInterface,
+      contract: farmazon_data,
+      services: farmazonskieSerwisy,
+      total: 10.0
+    };
+
+    if (await fetchClient(props.email) && client != null) {
+      invoice.client = client;
+    } else {
+      console.log("Client not found | Using default client data");
+    }
+    
+
+    let pdfFile: Blob;
+    try {
+      pdfFile = await generatePDFInvoiceFile(invoice, "faktura");
+    } catch (error) {
+      console.error(error);
+      return;
+    }
+
+    sendEmail(props.email, emailTextString, pdfFile);
     uploadFileToDrive(data);
   };
 
-  const sendEmail = (email: string, text: string, pdfInvoideFile: File) => {
-    const formData = new FormData();
-
-    formData.append('to', email);
-    formData.append('subject', 'Wiadomość od Dwarf MMA');
-    formData.append('text', text);
-    formData.append('attachment', pdfInvoideFile);
-
-    axios.post(API_SEND_EMAIL_URL, formData, MULTIPART_FORM_DATA_HEADER).catch((error) => {
-      alert("Email nie został wysłany. Może to wynikać z problemami z serwerem.");
-    });
+  function generateFarmazonId(length: number): string {
+    const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let id = '';
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      id += characters.charAt(randomIndex);
+    }
+    return id;
   }
 
   const uploadFileToDrive = (data: ContractInterfaceIn) => {
@@ -177,7 +223,7 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
       "status": data.status
     };
     axios.post(API_UPLOAD_FILE_URL, request_json, JSON_DATA_HEADER).catch((error) => {
-      alert("Plik nie został wysłany. Bartek cos zepsul");
+      alert("Plik nie został wysłany.");
     });
   }
 
