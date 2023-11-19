@@ -20,7 +20,6 @@ export const Contract = ({ contract }: { contract: ContractInterface }) => {
           width: "50%",
           height: 700,
         },
-        backgroundColor: "#89CFF3",
       }}
     >
       <Paper elevation={3}>
@@ -28,9 +27,7 @@ export const Contract = ({ contract }: { contract: ContractInterface }) => {
         <div>
           {contract.services.map((service, index) => (
             <div key={index}>
-              <p>
-                Nazwa: {service.ServiceName}
-              </p>
+              <p>Nazwa: {service.ServiceName}</p>
             </div>
           ))}
         </div>

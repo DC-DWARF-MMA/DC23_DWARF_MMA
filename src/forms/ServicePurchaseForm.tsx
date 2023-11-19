@@ -3,6 +3,7 @@ import { useClient, useSaveData, useServices } from "../services/FirebaseService
 import {
   Card,
   CardContent,
+  CardMedia,
   Typography,
   Grid,
   Checkbox,
@@ -21,10 +22,19 @@ import {
   ServiceInterface,
 } from "../models/models";
 import axios from "axios";
-import { API_SEND_EMAIL_URL, API_UPLOAD_FILE_URL, MULTIPART_FORM_DATA_HEADER, JSON_DATA_HEADER } from "../models/constants";
+import {
+  API_SEND_EMAIL_URL,
+  API_UPLOAD_FILE_URL,
+  MULTIPART_FORM_DATA_HEADER,
+  JSON_DATA_HEADER,
+} from "../models/constants";
+import { useProcess } from "../forms/formsContext/ProcessContext";
 import { InvoiceInterface, generatePDFInvoiceFile } from "../services/InvoiceService";
 import useEmailSender from "./SendEmail";
 import { Timestamp } from "firebase/firestore";
+import { ClassNames } from "@emotion/react";
+import background from "../images/background.png";
+
 type ServicePurchaseFormPropsType = {
   email: string;
 };
@@ -38,6 +48,7 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
   const services = useServices();
   const { client, fetchClient } = useClient();
   const { sendEmail } = useEmailSender();
+  const { processId, setProcessId } = useProcess();
   const { saveData, isCompleted } = useSaveData("contracts");
   const [selectedCards, setSelectedCards] = useState<ServiceInterfaceIn[]>([]);
   const [contractInformation, setContractInformation] =
@@ -84,6 +95,41 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
     }
     return endDate;
   };
+
+  const completeTask = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8080/engine-rest/task?processDefinitionKey=Process_190revr"
+      );
+
+      const taskToComplete = response.data.find(
+        (task: { processInstanceId: string }) =>
+          task.processInstanceId === processId
+      );
+
+      if (taskToComplete) {
+        const completeResponse = await axios.post(
+          `http://localhost:8080/engine-rest/task/${taskToComplete.id}/complete`,
+          {},
+          JSON_DATA_HEADER
+        );
+
+        if (completeResponse.status === 204) {
+          console.log(
+            `Task with id ${taskToComplete.id} completed successfully.`
+          );
+        } else {
+          console.log(`Could not complete task with id ${taskToComplete.id}.`);
+        }
+      } else {
+        console.log("No matching task found to complete.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Could not complete task!");
+    }
+  };
+  
   const handlePurchase = async () => {
     console.log("handlePurchase");
     const data: ContractInterfaceIn = {
@@ -101,99 +147,54 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
       status: "Unpaid",
     };
     saveData(data);
-    let emailTextString : string;
+    completeTask();
+    let emailTextString: string;
 
     emailTextString = "Zakupiono ";
     selectedCards.map((service, index) => {
-      if(service.type === "Subscription"){
-        emailTextString += "regularną subskrypcję na " + contractInformation.subscriptionLength + " ";
-        if(contractInformation.subscriptionLength > 1){
+      if (service.type === "Subscription") {
+        emailTextString +=
+          "regularną subskrypcję na " +
+          contractInformation.subscriptionLength +
+          " ";
+        if (contractInformation.subscriptionLength > 1) {
           emailTextString += "miesięcy";
-        }
-        else{
+        } else {
           emailTextString += "miesiąc";
         }
+      } else {
+        emailTextString += "transmisję jednorazową";
       }
-      else{
-        emailTextString += "transmisję jednorazową"
-      }
-      if(index != selectedCards.length - 1){
+      if (index != selectedCards.length - 1) {
         emailTextString += " i";
       }
       emailTextString += " ";
-    }
-    )
-    emailTextString += "za " + totalSelectedPrice.toString() + "zł. Dziękujemy za korzystanie z naszych usług. W załączniku znajduje się faktura w postaci pliku .pdf.";
+    });
+    emailTextString +=
+      "za " +
+      totalSelectedPrice.toString() +
+      "zł. Dziękujemy za korzystanie z naszych usług. W załączniku znajduje się faktura w postaci pliku .pdf.";
     console.log(emailTextString);
 
-    var farmazonskieSerwisy: ServiceInterface[] = selectedCards.map((service) => {
-      return {
-        name: service.name,
-        type: service.type,
-        price: service.price
-      } as ServiceInterface;
-    });
-
-
-    var farmazon_data = {...data, 
-      id: generateFarmazonId(20), 
-      endDate: Timestamp.fromDate(data.endDate),
-      startDate: Timestamp.fromDate(data.startDate)} as ContractInterface;
-
-    let invoice : InvoiceInterface = {
-      id: generateFarmazonId(20),
-      client: {
-        firstName: "Marek",
-        lastName: "Brandt",
-        email: props.email
-      } as ClientInterface,
-      contract: farmazon_data,
-      services: farmazonskieSerwisy,
-      total: 10.0
-    };
-
-    if (await fetchClient(props.email) && client != null) {
-      invoice.client = client;
-    } else {
-      console.log("Client not found | Using default client data");
-    }
-    
-
-    let pdfFile: Blob;
-    try {
-      pdfFile = await generatePDFInvoiceFile(invoice, "faktura");
-    } catch (error) {
-      console.error(error);
-      return;
-    }
-
-    sendEmail(props.email, emailTextString, pdfFile);
+    sendEmail(props.email, emailTextString, new File([], "test.pdf"));
     uploadFileToDrive(data);
   };
 
-  function generateFarmazonId(length: number): string {
-    const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let id = '';
-    for (let i = 0; i < length; i++) {
-      const randomIndex = Math.floor(Math.random() * characters.length);
-      id += characters.charAt(randomIndex);
-    }
-    return id;
-  }
-
   const uploadFileToDrive = (data: ContractInterfaceIn) => {
     const request_json = {
-      "email": data.email,
-      "endDate": data.endDate,
-      "paymentMethod": data.paymentMethod,
-      "services": data.services,
-      "startDate": data.startDate,
-      "status": data.status
+      email: data.email,
+      endDate: data.endDate,
+      paymentMethod: data.paymentMethod,
+      services: data.services,
+      startDate: data.startDate,
+      status: data.status,
     };
-    axios.post(API_UPLOAD_FILE_URL, request_json, JSON_DATA_HEADER).catch((error) => {
-      alert("Plik nie został wysłany.");
-    });
-  }
+    axios
+      .post(API_UPLOAD_FILE_URL, request_json, JSON_DATA_HEADER)
+      .catch((error) => {
+        alert("Plik nie został wysłany. Bartek cos zepsul");
+      });
+  };
 
   return (
     <div style={{ textAlign: "center" }}>
@@ -214,6 +215,12 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
                   minWidth={300}
                 >
                   <Card>
+                    <CardMedia
+                      component="img"
+                      alt={service.name}
+                      height="140" // Set the desired height
+                      image={background} // Replace with the actual path to your image
+                    />
                     <CardContent>
                       <Typography variant="h6" component="div">
                         {service.name}
@@ -242,7 +249,11 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
               onChange={handleInputChange}
               row
             >
-              <FormControlLabel value={1} control={<Radio />} label="1 miesiąc" />
+              <FormControlLabel
+                value={1}
+                control={<Radio />}
+                label="1 miesiąc"
+              />
               <FormControlLabel
                 value={12}
                 control={<Radio />}
@@ -268,7 +279,7 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
             </RadioGroup>
             <Button
               variant="contained"
-              color="primary"
+              color="error"
               fullWidth
               onClick={handlePurchase}
             >

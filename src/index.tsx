@@ -4,14 +4,18 @@ import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import Router from "./Router";
 import { UserProvider } from "./forms/formsContext/UserContext";
+import { ProcessProvider } from "./forms/formsContext/ProcessContext";
+
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <UserProvider>
-      <Router />
-    </UserProvider>
+    <ProcessProvider>
+      <UserProvider>
+        <Router />
+      </UserProvider>
+    </ProcessProvider>
   </React.StrictMode>
 );
 

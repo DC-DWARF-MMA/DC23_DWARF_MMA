@@ -38,7 +38,6 @@ export const InvoiceGenerator = ({
 
     doc.setFontSize(14);
     doc.text("Usługi:", 40, 200);
-    doc.line(40, 210, 550, 210);
     // Add item details
     doc.setFontSize(10);
     let yOffset = 240;
@@ -65,7 +64,7 @@ export const InvoiceGenerator = ({
   };
 
   return (
-    <Button variant="contained" onClick={generateInvoice}>
+    <Button variant="contained" onClick={generateInvoice} color="error">
       Wygeneruj fakturę
     </Button>
   );
