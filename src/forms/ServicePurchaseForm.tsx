@@ -33,7 +33,8 @@ import { InvoiceInterface, generatePDFInvoiceFile } from "../services/InvoiceSer
 import useEmailSender from "./SendEmail";
 import { Timestamp } from "firebase/firestore";
 import { ClassNames } from "@emotion/react";
-import background from "../images/background.png";
+import red_gnome from "../images/red_gnome.png";
+import red_gnome_better from "../images/red_gnome_better.png";
 
 type ServicePurchaseFormPropsType = {
   email: string;
@@ -197,13 +198,13 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
   };
 
   return (
-    <div style={{ textAlign: "center" }}>
+    <div style={{ textAlign: "center", padding: "10px", justifyContent: 'space-between' }}>
       {!isCompleted ? (
         <>
           <Typography variant="h5">
             Całkowity koszt: {totalSelectedPrice} zł
           </Typography>
-          <Grid container spacing={2}>
+          <Grid container spacing={2} padding="10px">
             {services &&
               services.map((service) => (
                 <Grid
@@ -212,21 +213,19 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
                   xs={12}
                   sm={6}
                   md={4}
-                  minWidth={300}
+                  minWidth={400}
                 >
                   <Card>
                     <CardMedia
                       component="img"
                       alt={service.name}
-                      height="140" // Set the desired height
-                      image={background} // Replace with the actual path to your image
+                      height="240" // Set the desired height
+                      image={red_gnome} // Replace with the actual path to your image
                     />
                     <CardContent>
                       <Typography variant="h6" component="div">
-                        {service.name}
-                      </Typography>
-                      <Typography variant="subtitle1">
-                        Typ: {service.type}
+                        {service.name === "JednorazowaTransmisja" && <b>Jednorazowa transmisja</b>}
+                        {service.name === "Regularna Subskrybcja" && <b>Regularna subskrypcja</b>}
                       </Typography>
                       <Typography variant="subtitle2">
                         Cena: {service.price} zł
@@ -241,7 +240,7 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
               ))}
           </Grid>
           <FormControl component="fieldset">
-            <Typography variant="h6">Długość subskrypcji</Typography>
+            <Typography padding="10px" variant="h6">Długość subskrypcji</Typography>
             <RadioGroup
               aria-label="Subscription Length"
               name="subscriptionLength"
@@ -260,7 +259,7 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
                 label="12 miesięcy"
               />
             </RadioGroup>
-            <Typography variant="h6">Metoda płatności</Typography>
+            <Typography padding="10px" variant="h6">Metoda płatności</Typography>
             <RadioGroup
               aria-label="Payment Method"
               name="paymentMethod"
@@ -282,13 +281,14 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
               color="error"
               fullWidth
               onClick={handlePurchase}
+              style={{ backgroundColor: "#BE3144" }}
             >
               KUP TERAZ
             </Button>
           </FormControl>
         </>
       ) : (
-        <Typography variant="h5">Transakcja powiodła się!</Typography>
+        <Typography padding="10px" variant="h5">Transakcja powiodła się!</Typography>
       )}
     </div>
   );
