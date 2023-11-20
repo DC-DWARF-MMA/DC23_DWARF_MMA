@@ -17,9 +17,10 @@ export const Contract = ({ contract }: { contract: ContractInterface }) => {
         "& > :not(style)": {
           m: 1,
           minWidth: 300,
-          width: "50%",
+          width: 450,
           height: 700,
         },
+        backgroundOpacity: 0.5,
       }}
     >
       <Paper elevation={3}>
@@ -41,8 +42,12 @@ export const Contract = ({ contract }: { contract: ContractInterface }) => {
         <p>{contract.status}</p>
         <InvoiceGenerator contract={contract} />
         <p> </p>
-        <Button variant="contained" component={Link} to={"/Edit?id=" + contract.id}>
-            Edytuj Kontrakt
+        <Button
+          variant="contained"
+          component={Link}
+          to={"/Edit?id=" + contract.id}
+        >
+          Edytuj Kontrakt
         </Button>
       </Paper>
     </Box>

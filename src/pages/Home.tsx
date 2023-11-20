@@ -7,10 +7,11 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { JSON_DATA_HEADER } from "../models/constants";
 import { useProcess } from "../forms/formsContext/ProcessContext";
-import background from "../images/background.png";
+import background from "../images/background-wide.png";
 const backgroundStyle = {
   backgroundImage: `url(${background})`,
   backgroundSize: "cover",
+  backgroundAttachment: "fixed",
   backgroundRepeat: "no-repeat",
   backgroundPosition: "center",
   minHeight: "100vh",

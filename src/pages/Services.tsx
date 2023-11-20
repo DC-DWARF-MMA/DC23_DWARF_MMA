@@ -3,7 +3,7 @@ import { Typography } from "@mui/material";
 import { ServicePurchaseForm } from "../forms/ServicePurchaseForm";
 import { UserEmailInputForm } from "../forms/UserEmailInputForm";
 import { useUser } from "../forms/formsContext/UserContext";
-import background from "../images/background.png";
+import background from "../images/background-wide.png";
 export const centerStyle = {
   backgroundImage: `url(${background})`,
   backgroundSize: "cover",

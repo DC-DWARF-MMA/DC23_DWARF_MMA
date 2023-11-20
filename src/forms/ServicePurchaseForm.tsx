@@ -1,5 +1,9 @@
 import { useState } from "react";
-import { useClient, useSaveData, useServices } from "../services/FirebaseService";
+import {
+  useClient,
+  useSaveData,
+  useServices,
+} from "../services/FirebaseService";
 import {
   Card,
   CardContent,
@@ -29,12 +33,15 @@ import {
   JSON_DATA_HEADER,
 } from "../models/constants";
 import { useProcess } from "../forms/formsContext/ProcessContext";
-import { InvoiceInterface, generatePDFInvoiceFile } from "../services/InvoiceService";
+import {
+  InvoiceInterface,
+  generatePDFInvoiceFile,
+} from "../services/InvoiceService";
 import useEmailSender from "./SendEmail";
 import { Timestamp } from "firebase/firestore";
 import { ClassNames } from "@emotion/react";
-import red_gnome from "../images/red_gnome.png";
-import red_gnome_better from "../images/red_gnome_better.png";
+import red_gnome_better from "../images/red_gnome.png";
+import big_dwarf_sub from "../images/BIG-DWARF-SUB.png";
 
 type ServicePurchaseFormPropsType = {
   email: string;
@@ -130,7 +137,7 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
       alert("Could not complete task!");
     }
   };
-  
+
   const handlePurchase = async () => {
     console.log("handlePurchase");
     const data: ContractInterfaceIn = {
@@ -198,7 +205,13 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
   };
 
   return (
-    <div style={{ textAlign: "center", padding: "10px", justifyContent: 'space-between' }}>
+    <div
+      style={{
+        textAlign: "center",
+        padding: "10px",
+        justifyContent: "space-between",
+      }}
+    >
       {!isCompleted ? (
         <>
           <Typography variant="h5">
@@ -220,12 +233,20 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
                       component="img"
                       alt={service.name}
                       height="240" // Set the desired height
-                      image={red_gnome} // Replace with the actual path to your image
+                      image={
+                        service.name === "JednorazowaTransmisja"
+                          ? red_gnome_better
+                          : big_dwarf_sub
+                      } // Replace with the actual path to your image
                     />
                     <CardContent>
                       <Typography variant="h6" component="div">
-                        {service.name === "JednorazowaTransmisja" && <b>Jednorazowa transmisja</b>}
-                        {service.name === "Regularna Subskrybcja" && <b>Regularna subskrypcja</b>}
+                        {service.name === "JednorazowaTransmisja" && (
+                          <b>Jednorazowa transmisja</b>
+                        )}
+                        {service.name === "Regularna Subskrybcja" && (
+                          <b>Regularna subskrypcja</b>
+                        )}
                       </Typography>
                       <Typography variant="subtitle2">
                         Cena: {service.price} zł
@@ -240,7 +261,9 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
               ))}
           </Grid>
           <FormControl component="fieldset">
-            <Typography padding="10px" variant="h6">Długość subskrypcji</Typography>
+            <Typography padding="10px" variant="h6">
+              Długość subskrypcji
+            </Typography>
             <RadioGroup
               aria-label="Subscription Length"
               name="subscriptionLength"
@@ -259,7 +282,9 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
                 label="12 miesięcy"
               />
             </RadioGroup>
-            <Typography padding="10px" variant="h6">Metoda płatności</Typography>
+            <Typography padding="10px" variant="h6">
+              Metoda płatności
+            </Typography>
             <RadioGroup
               aria-label="Payment Method"
               name="paymentMethod"
@@ -288,7 +313,9 @@ export const ServicePurchaseForm: React.FC<ServicePurchaseFormPropsType> = (
           </FormControl>
         </>
       ) : (
-        <Typography padding="10px" variant="h5">Transakcja powiodła się!</Typography>
+        <Typography padding="10px" variant="h5">
+          Transakcja powiodła się!
+        </Typography>
       )}
     </div>
   );
