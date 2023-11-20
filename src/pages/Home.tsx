@@ -8,7 +8,7 @@ import axios from "axios";
 import { JSON_DATA_HEADER } from "../models/constants";
 import { useProcess } from "../forms/formsContext/ProcessContext";
 import background from "../images/background-wide.png";
-const backgroundStyle = {
+export const backgroundStyle = {
   backgroundImage: `url(${background})`,
   backgroundSize: "cover",
   backgroundAttachment: "fixed",

@@ -120,61 +120,22 @@ const ContractEditForm: React.FC<ContractEditPropsType> = (props) => {
   };
 
   return (
-    <Container maxWidth="sm" style={{ marginTop: "10px" }}>
+    <Container
+      maxWidth="sm"
+      style={{
+        textAlign: "center",
+        padding: "10px",
+        justifyContent: "space-between",
+        paddingTop: "200px",
+      }}
+    >
       {!isCompleted && (
         <>
           <form onSubmit={handleSubmit}>
-            {/* <Grid container spacing={2}>
-            {services &&
-              services.map((service) => (
-                <Grid
-                  item
-                  key={service.name}
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  minWidth={300}
-                >
-                  <Card>
-                    <CardContent>
-                      <Typography variant="h6" component="div">
-                        {service.name}
-                      </Typography>
-                      <Typography variant="subtitle1">
-                        Typ: {service.type}
-                      </Typography>
-                      <Typography variant="subtitle2">
-                        Cena: {service.price} zł
-                      </Typography>
-                      <Checkbox
-                        checked={selectedCards.includes(service)}
-                        onChange={() => toggleCardSelection(service)}
-                      />
-                    </CardContent>
-                  </Card>
-                </Grid>
-              ))}
-            </Grid> */}
-            {/* 
-            <Grid item xs={12}>
-              <TextField
-                name="endDateString"
-                label="End Date"
-                type="date"
-                variant="outlined"
-                fullWidth
-                value={formValues.endDate.toISOString().slice(0, 10)}
-                onChange={handleDateChange}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-            </Grid> */}
-
             <Grid item xs={12}>
               <TextField
                 name="startDateString"
-                label="Data rozpoczęcia"
+                label="Data zakończenia"
                 type="date"
                 variant="outlined"
                 fullWidth
